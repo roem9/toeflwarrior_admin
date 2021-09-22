@@ -88,7 +88,7 @@ class Subsoal_model extends MY_Model {
             $urutan = 1;
         }
 
-        if($_POST['item'] == "audio"){
+        if($_POST['item'] == "gambar" || $_POST['item'] == "audio"){
             $data = [
                 "id_sub" => $soal['id_sub'],
                 "item" => $this->input->post("item"),
@@ -99,7 +99,7 @@ class Subsoal_model extends MY_Model {
 
             $query = $this->Main_model->add_data("item_soal", $data);
 
-            $this->upload_media($query, $_FILES);
+            $this->upload_media($query, $_FILES, $_POST['item']);
 
             if($query){
                 return 1;
@@ -153,7 +153,7 @@ class Subsoal_model extends MY_Model {
                 
                 $j++;
 
-            } else if($soal['item'] == "petunjuk" || $soal['item'] == "audio"){
+            } else if($soal['item'] == "petunjuk" || $soal['item'] == "audio" || $soal['item'] == "gambar"){
                 $data['item'][$i] = $soal;
             }
         }
@@ -216,6 +216,10 @@ class Subsoal_model extends MY_Model {
             unlink('./assets/myaudio/'.$item['data']);
         }
 
+        if($item['item'] == "gambar"){
+            unlink('./assets/myimg/'.$item['data']);
+        }
+
         $id_sub = $item['id_sub'];
         $urutan = $item['urutan'];
 
@@ -230,14 +234,15 @@ class Subsoal_model extends MY_Model {
         else return 0;
     }
 
-    public function upload_media($id, $file){
+    public function upload_media($id, $file, $tipe){
         if(isset($file['file']['name'])) {
 
             $nama_file = $_FILES['file'] ['name']; // Nama Audio
             $size        = $_FILES['file'] ['size'];// Size Audio
             $error       = $_FILES['file'] ['error'];
             $tipe_audio  = $_FILES['file'] ['type']; //tipe audio untuk filter
-            $folder      = "./assets/myaudio/";
+            if($tipe == "audio") $folder      = "./assets/myaudio/";
+            else if($tipe == "gambar") $folder      = "./assets/myimg/";
             $valid       = array('jpg','png','gif','jpeg', 'JPG', 'PNG', 'GIF', 'JPEG', 'mp3', 'MP3');
             
             if(strlen($nama_file)){   

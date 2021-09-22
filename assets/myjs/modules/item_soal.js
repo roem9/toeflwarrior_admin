@@ -38,6 +38,17 @@ $(document).on("click", ".addItem, #addItem .btnBack", function(){
                         </div>
                     </div>
                 </label>
+                <label class="form-selectgroup-item flex-fill">
+                    <input type="radio" name="item" value="gambar" class="form-selectgroup-input">
+                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                        <div class="me-3">
+                            <span class="form-selectgroup-check"></span>
+                        </div>
+                        <div>
+                            Tambah Gambar
+                        </div>
+                    </div>
+                </label>
             </div>
         </div>`;
 
@@ -145,6 +156,14 @@ $(document).on("click", "#addItem .btnNext", function(){
         } else if(item == "audio"){
             html += `
             <label for="">Upload Audio</label>
+            <div class="form-floating mb-3">
+                <input type="file" name="file" id="file" class="form form-control required">\
+            </div>`;
+
+            $(form+" .modal-body").html(html);
+        } else if(item == "gambar"){
+            html += `
+            <label for="">Upload Gambar</label>
             <div class="form-floating mb-3">
                 <input type="file" name="file" id="file" class="form form-control required">\
             </div>`;
@@ -449,6 +468,89 @@ $(document).on("click", "#addItem .btnAdd", function(){
                 }
             })
         } else{
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                text: 'Pilih file terlebih dahulu',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    } else if(item == "gambar"){
+        var fd = new FormData();
+        var files = $('#file')[0].files;
+        
+        // Check file selected or not
+        if(files.length > 0 ){
+            Swal.fire({
+                icon: 'question',
+                text: 'Yakin akan menambahkan gambar baru?',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then(function (result) {
+                if (result.value) {
+                    fd.append('file',files[0]);
+                    fd.append('id_sub', $(form+" input[name='id_sub']").val());
+                    fd.append('item', item);
+
+                    let eror = required(form);
+                
+                    if( eror == 1){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'lengkapi isi form terlebih dahulu'
+                        })
+                    } else {
+
+                        loading();
+                        
+                        $.ajax({
+                            url: url_base+'subsoal/add_item_soal',
+                            type: 'post',
+                            data: fd,
+                            contentType: false,
+                            processData: false,
+                            success: function(response){
+
+                                if(response == 1){
+                                    
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'success',
+                                        text: 'Berhasil mengupload file',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                } else if(response == 2){
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'error',
+                                        text: 'Gagal mengupload file',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                } else if(response == 0){
+                                    Swal.fire({
+                                        position: 'center',
+                                        icon: 'error',
+                                        text: 'Gagal mengupload file',
+                                        showConfirmButton: false,
+                                        timer: 1500
+                                    })
+                                }
+                                
+                                $("#addItem").modal("hide");
+                                load_item(id)
+
+                            },
+                        });
+                    }
+                }
+            })
+        }else{
             Swal.fire({
                 position: 'center',
                 icon: 'error',

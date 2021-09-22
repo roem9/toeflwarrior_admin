@@ -268,7 +268,7 @@ class Tes extends MY_Controller {
         $peserta['nama'] = $peserta['nama'];
         $peserta['t4_lahir'] = ucwords(strtolower($peserta['t4_lahir']));
         $peserta['tahun'] = date('Y', strtotime($tes['tgl_tes']));
-        $peserta['bulan'] = getRomawi(date('m', strtotime($tes['tgl_tes'])));
+        $peserta['bulan'] = date('m', strtotime($tes['tgl_tes']));
         $peserta['listening'] = poin("Listening", $peserta['nilai_listening']);
         $peserta['structure'] = poin("Structure", $peserta['nilai_structure']);
         $peserta['reading'] = poin("Reading", $peserta['nilai_reading']);
@@ -279,7 +279,7 @@ class Tes extends MY_Controller {
 
         $skor = round($skor);
         
-        $peserta['no_doc'] = "{$peserta['no_doc']}/AIMTP/{$peserta['bulan']}/{$peserta['tahun']}";
+        $peserta['no_doc'] = "PT-TW/{$peserta['bulan']}/{$peserta['tahun']}/{$peserta['no_doc']}";
 
         $peserta['config'] = $this->tes->config();
         $peserta['id_tes'] = $peserta['id_tes'];
@@ -287,7 +287,7 @@ class Tes extends MY_Controller {
         $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
         $fontData = $defaultFontConfig['fontdata'];
         
-        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [148, 210], 'orientation' => 'L',
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [210, 297], 'orientation' => 'L',
         // , 'margin_top' => '43', 'margin_left' => '25', 'margin_right' => '25', 'margin_bottom' => '35',
             'fontdata' => $fontData + [
                 'rockb' => [
@@ -308,6 +308,9 @@ class Tes extends MY_Controller {
                 ],
                 'cambria' => [
                     'R' => 'CAMBRIAB.TTF',
+                ],
+                'montserrat' => [
+                    'R' => 'Montserrat-Regular.ttf',
                 ]
             ], 
         ]);
