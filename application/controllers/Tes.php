@@ -126,8 +126,10 @@ class Tes extends MY_Controller {
                     $kolom = 4;
                     $nomor = 1;
                     foreach($semua_peserta as $peserta) {
+                        $tahun = date('Y', strtotime($tes['tgl_tes']));
+                        $bulan = date('m', strtotime($tes['tgl_tes']));
 
-                        if($peserta['no_doc'] != "") $no_doc = "{$tahun}/{$peserta['no_doc']}";
+                        if($peserta['no_doc'] != "") $no_doc = "PT-TW/{$bulan}/{$tahun}/{$peserta['no_doc']}";
                         else $no_doc = "-";
 
                             $spreadsheet->setActiveSheetIndex(0)
@@ -265,7 +267,7 @@ class Tes extends MY_Controller {
     public function sertifikat($id){
         $peserta = $this->tes->get_one("peserta_toefl", ["md5(id)" => $id]);
         $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
-        $peserta['nama'] = $peserta['nama'];
+        $peserta['nama'] = ucwords(strtolower($peserta['nama']));
         $peserta['t4_lahir'] = ucwords(strtolower($peserta['t4_lahir']));
         $peserta['tahun'] = date('Y', strtotime($tes['tgl_tes']));
         $peserta['bulan'] = date('m', strtotime($tes['tgl_tes']));
