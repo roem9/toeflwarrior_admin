@@ -24,7 +24,7 @@ function load_item(id){
                                     <div class="text-right" dir="rtl">
                                         <label>
                                             <input type="radio" `+checked+`>
-                                            `+data_pilihan+`
+                                            <span>`+data_pilihan+`</span>
                                         </label>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@ function load_item(id){
                                 <div class="form-check p-0">
                                     <label>
                                         <input type="radio" `+checked+`>
-                                        `+data_pilihan+`
+                                        <span>`+data_pilihan+`</span>
                                     </label>
                                 </div>
                             </div>`
