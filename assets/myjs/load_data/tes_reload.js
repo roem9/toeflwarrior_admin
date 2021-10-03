@@ -16,7 +16,7 @@ var datatable = $('#dataTable').DataTable({
     columns: [
         {"data": "nama_tes"},
         {"data": "tgl_tes"},
-        {"data": "tgl_pengumuman"},
+        // {"data": "tgl_pengumuman"},
         {"data": "nama_soal", render : function(data, row, iDisplayIndex) {
             return data+" ("+iDisplayIndex.soal+")";
         }},
