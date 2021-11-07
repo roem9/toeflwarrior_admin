@@ -16,7 +16,7 @@ var datatable = $('#dataTable').DataTable({
     columns: [
         {"data": "nama_tes"},
         {"data": "tgl_tes"},
-        // {"data": "tgl_pengumuman"},
+        {"data": "tgl_pengumuman"},
         {"data": "nama_soal", render : function(data, row, iDisplayIndex) {
             return data+" ("+iDisplayIndex.soal+")";
         }},
@@ -24,6 +24,7 @@ var datatable = $('#dataTable').DataTable({
             if(jQuery.browser.mobile == true) return data
             else return "<center>"+data+"</center>"
         }},
+        {"data": "sertifikat"},
         {"data": "status", render : function(data, row, iDisplayIndex){
             (data == 'Berjalan' ? status = "checked" : status = "");
             
