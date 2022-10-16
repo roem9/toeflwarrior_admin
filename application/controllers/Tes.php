@@ -267,7 +267,7 @@ class Tes extends MY_Controller {
     public function sertifikat($id){
         $peserta = $this->tes->get_one("peserta_toefl", ["md5(id)" => $id]);
         $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
-        $peserta['nama'] = ucwords(strtolower($peserta['nama']));
+        $peserta['nama'] = $peserta['nama'];
         $peserta['t4_lahir'] = ucwords(strtolower($peserta['t4_lahir']));
         $peserta['tahun'] = date('Y', strtotime($tes['tgl_tes']));
         $peserta['bulan'] = date('m', strtotime($tes['tgl_tes']));
