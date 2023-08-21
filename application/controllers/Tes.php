@@ -263,6 +263,11 @@ class Tes extends MY_Controller {
         $data = $this->tes->add_sertifikat_toefl();
         echo json_encode($data);
     }
+
+    public function add_sertifikat_toefl_course(){
+        $data = $this->tes->add_sertifikat_toefl_course();
+        echo json_encode($data);
+    }
     
     public function sertifikat($id){
         $peserta = $this->tes->get_one("peserta_toefl", ["md5(id)" => $id]);
@@ -319,6 +324,65 @@ class Tes extends MY_Controller {
 
         $mpdf->SetTitle("{$peserta['nama']}");
         $mpdf->WriteHTML($this->load->view('pages/tes/sertifikat', $peserta, TRUE));
+        $mpdf->Output("{$peserta['nama']}.pdf", "I");
+
+    }
+
+    public function sertifikat_course($id){
+        $peserta = $this->tes->get_one("peserta_toefl", ["md5(id)" => $id]);
+        $tes = $this->tes->get_one("tes", ["id_tes" => $peserta['id_tes']]);
+        $peserta['nama'] = $peserta['nama'];
+        $peserta['t4_lahir'] = ucwords(strtolower($peserta['t4_lahir']));
+        $peserta['tahun'] = date('Y', strtotime($tes['tgl_tes']));
+        $peserta['bulan'] = date('m', strtotime($tes['tgl_tes']));
+        $peserta['listening'] = poin("Listening", $peserta['nilai_listening']);
+        $peserta['structure'] = poin("Structure", $peserta['nilai_structure']);
+        $peserta['reading'] = poin("Reading", $peserta['nilai_reading']);
+        $peserta['tgl_tes'] = $tes['tgl_tes'];
+
+        $skor = ((poin("Listening", $peserta['nilai_listening']) + poin("Structure", $peserta['nilai_structure']) + poin("Reading", $peserta['nilai_reading'])) * 10) / 3;
+        $peserta['skor'] = $skor;
+
+        $skor = round($skor);
+        
+        $peserta['no_doc'] = "TI-TW/{$peserta['bulan']}/{$peserta['tahun']}/{$peserta['no_doc']}";
+
+        $peserta['config'] = $this->tes->config();
+        $peserta['id_tes'] = $peserta['id_tes'];
+        
+        $defaultFontConfig = (new Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        
+        $mpdf = new \Mpdf\Mpdf(['mode' => 'utf-8', 'format' => [210, 297], 'orientation' => 'L',
+        // , 'margin_top' => '43', 'margin_left' => '25', 'margin_right' => '25', 'margin_bottom' => '35',
+            'fontdata' => $fontData + [
+                'rockb' => [
+                    'R' => 'ROCKB.TTF',
+                ],'rock' => [
+                    'R' => 'ROCK.TTF',
+                ],
+                'arial' => [
+                    'R' => 'arial.ttf',
+                    'useOTL' => 0xFF,
+                    'useKashida' => 75,
+                ],
+                'bodoni' => [
+                    'R' => 'BOD_R.TTF',
+                ],
+                'calibri' => [
+                    'R' => 'CALIBRI.TTF',
+                ],
+                'cambria' => [
+                    'R' => 'CAMBRIAB.TTF',
+                ],
+                'montserrat' => [
+                    'R' => 'Montserrat-Regular.ttf',
+                ]
+            ], 
+        ]);
+
+        $mpdf->SetTitle("{$peserta['nama']}");
+        $mpdf->WriteHTML($this->load->view('pages/tes/sertifikat_course', $peserta, TRUE));
         $mpdf->Output("{$peserta['nama']}.pdf", "I");
 
     }

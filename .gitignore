@@ -21,6 +21,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /assets/myaudio/
 /assets/img/logo.png
 /assets/qrcode/
+/assets/qrcode_course/
 /assets/myimg/
 
 # IDE Files

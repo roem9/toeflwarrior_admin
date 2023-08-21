@@ -57,7 +57,7 @@ class Tes_model extends MY_Model {
         $config = $this->config();
 
         if($tipe == "TOAFL" || $tipe == "TOEFL"){
-            $this->datatables->select("id, id_tes, nama, t4_lahir, tgl_lahir, alamat, alamat_pengiriman, no_wa, email, nilai_listening, nilai_structure, nilai_reading, sertifikat, file, no_doc");
+            $this->datatables->select("id, id_tes, nama, t4_lahir, tgl_lahir, alamat, alamat_pengiriman, no_wa, email, nilai_listening, nilai_structure, nilai_reading, sertifikat, file, no_doc, no_doc_course");
             $this->datatables->from("peserta_toefl");
             $this->datatables->where("md5(id_tes)", $id);
             $this->datatables->edit_column("nilai_listening", '$1', 'poin("Listening", nilai_listening)');
@@ -65,6 +65,9 @@ class Tes_model extends MY_Model {
             $this->datatables->edit_column("nilai_reading", '$1', 'poin("Reading", nilai_reading)');
             $this->datatables->add_column('full', '
                 <a href="'.base_url().'tes/sertifikat/$1" target="_blank" class="btn btn-info">'.tablerIcon("award", "me-1").'</a>
+            ', 'md5(id)');
+            $this->datatables->add_column('no_doc_course_link', '
+                <a href="'.base_url().'tes/sertifikat_course/$1" target="_blank" class="btn btn-info">'.tablerIcon("award", "me-1").'</a>
             ', 'md5(id)');
             $this->datatables->add_column('skor', '$1', 'skor(nilai_listening, nilai_structure, nilai_reading)');
         } else {
@@ -260,6 +263,56 @@ class Tes_model extends MY_Model {
 
 
         $data = $this->edit_data("peserta_toefl", ["id" => $id], ["no_doc" => $no_doc]);
+        if($data) return 1;
+        else return 0;
+    }
+
+    public function add_sertifikat_toefl_course(){
+        $config = $this->config();
+
+        $id = $this->input->post("id");
+
+        $peserta = $this->get_one("peserta_toefl", ["id" => $id]);
+        $tes = $this->get_one("tes", ["id_tes" => $peserta['id_tes']]);
+        
+        $date = date('Y', strtotime($tes['tgl_tes']));
+
+        $this->db->select("CONVERT(no_doc_course, UNSIGNED INTEGER) AS num");
+        $this->db->from("peserta_toefl as a");
+        $this->db->join("tes as b", "a.id_tes = b.id_tes");
+        $this->db->where("YEAR(tgl_tes)", $date);
+        $this->db->order_by("num", "DESC");
+        $data = $this->db->get()->row_array();
+
+        if($data) $no = $data['num']+1;
+        else $no = 1;
+
+        if($no > 0 && $no < 10) $no_doc_course = "00".$no;
+        elseif($no >= 10 && $no < 100) $no_doc_course = "0".$no;
+        elseif($no >= 100) $no_doc_course = $no;
+        
+        $this->load->library('qrcode/ciqrcode'); //pemanggilan library QR CODE
+
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+        $config['imagedir']     = './assets/qrcode_course/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+        $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name=$id.'.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = $config[1]['value']."/sertifikat/course_no/".md5($id); //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
+        $data = $this->edit_data("peserta_toefl", ["id" => $id], ["no_doc_course" => $no_doc_course]);
         if($data) return 1;
         else return 0;
     }
