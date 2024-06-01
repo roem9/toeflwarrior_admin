@@ -46,44 +46,18 @@
         .qrcode{
             width: 210px;
 			position: absolute;
-            left: 150px;
-			bottom: 80px;
+            left: 76px;
+			bottom: 260px;
             font-size: 35px;
             word-spacing: 3px;
-        }
-
-        .nilai{
-            /* background-color: red; */
-            width: 95px;
-			position: absolute;
-            left: 683px;
-			top: 565px;
-            font-size: 20px;
-            font-family: 'montserrat';
-            word-spacing: 5px;
-            color: #6a7b83;
-            font-weight: bold;
-        }
-
-        .total{
-            /* background-color: red; */
-            width: 95px;
-			position: absolute;
-            left: 345px;
-			top: 565px;
-            font-size: 20px;
-            font-family: 'montserrat';
-            /* word-spacing: 3px; */
-            color: #6a7b83;
-            font-weight: bold;
         }
 
         .nama{
             /* background-color: red; */
             width: 1000px;
 			position: absolute;
-            left: 63px;
-			top: 339px;
+            left: 90px;
+			top: 259px;
             font-size: 39px;
             /* font-family: 'rockb'; */
             font-family: 'montserrat';
@@ -95,12 +69,13 @@
             /* background-color: red; */
             width: 250px;
 			position: absolute;
-            left: 540px;
-			bottom: 147px;
+            left: 573px;
+			bottom: 187px;
             font-size: 17px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
         }
 
         .t4{
@@ -120,11 +95,12 @@
             width: 95px;
 			position: absolute;
             left: 683px;
-			top: 493px;
+			top: 413px;
             font-size: 18px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
         }
         
         .structure{
@@ -132,11 +108,12 @@
             width: 95px;
 			position: absolute;
             left: 683px;
-			top: 517px;
+			top: 447px;
             font-size: 18px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
         }
         
         .reading{
@@ -144,35 +121,67 @@
             width: 95px;
 			position: absolute;
             left: 683px;
-			top: 541px;
+			top: 481px;
             font-size: 18px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
+        }
+
+        .nilai{
+            /* background-color: red; */
+            width: 95px;
+			position: absolute;
+            left: 683px;
+			top: 510px;
+            font-size: 20px;
+            font-family: 'montserrat';
+            word-spacing: 5px;
+            /* color: #6a7b83; */
+            color: black;
+            font-weight: bold;
+        }
+
+        
+        .total{
+            /* background-color: red; */
+            width: 95px;
+			position: absolute;
+            left: 345px;
+			top: 505px;
+            font-size: 20px;
+            font-family: 'montserrat';
+            /* word-spacing: 3px; */
+            /* color: #6a7b83; */
+            color: black;
+            font-weight: bold;
         }
 
         .tgl{
             /* background-color: red; */
             width: 250px;
 			position: absolute;
-            left: 205px;
-			bottom: 37px;
+            left: 130px;
+			bottom: 187px;
             font-size: 16px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
         }
 
         .no_doc{
             /* background-color: red; */
             width: 250px;
 			position: absolute;
-            left: 283px;
-			bottom: 19px;
+            left: 203px;
+			bottom: 169px;
             font-size: 16px;
             font-family: 'montserrat';
             word-spacing: 3px;
-            color: #6a7b83;
+            /* color: #6a7b83; */
+            color: black;
         }
 
         .gender{
@@ -225,7 +234,7 @@
         <div class="qrcode">
             <img src="<?= base_url()?>assets/qrcode/<?= $id?>.png" width=120 alt="">
         </div>
-        <div class="total">Total</div>
+        <!-- <div class="total">Total</div> -->
         <div class="nilai"><p style="text-align: right; margin: 0px"><?= round($skor)?></p></div>
         <div class="nama"><p style="text-align: center; margin: 0px"><b><?= $nama?></b></p></div>
         <div class="ttl"><p style="text-align: left; margin: 0px"><?= tgl_sertifikat(date("d-m-Y", strtotime($tgl_lahir)))?></p></div>
